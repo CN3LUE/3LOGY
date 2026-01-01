@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  // base: "/3LOGY/", // 일단 이건 꺼두신 거 맞죠?
+  base: "/3LOGY/", // 일단 이건 꺼두신 거 맞죠?
   
   // ✨ [여기 추가] 주소를 5173으로 강력 고정!
   server: {
