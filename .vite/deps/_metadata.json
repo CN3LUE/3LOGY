@@ -2,60 +2,7 @@
   "hash": "af7efbac",
   "configHash": "c5aa8332",
   "lockfileHash": "b256f36e",
-  "browserHash": "a2701270",
-  "optimized": {
-    "react": {
-      "src": "../../node_modules/react/index.js",
-      "file": "react.js",
-      "fileHash": "949b3524",
-      "needsInterop": true
-    },
-    "react-dom/client": {
-      "src": "../../node_modules/react-dom/client.js",
-      "file": "react-dom_client.js",
-      "fileHash": "5b8fddb9",
-      "needsInterop": true
-    },
-    "lucide-react": {
-      "src": "../../node_modules/lucide-react/dist/esm/lucide-react.js",
-      "file": "lucide-react.js",
-      "fileHash": "babb6953",
-      "needsInterop": false
-    },
-    "framer-motion": {
-      "src": "../../node_modules/framer-motion/dist/es/index.mjs",
-      "file": "framer-motion.js",
-      "fileHash": "9bf01c09",
-      "needsInterop": false
-    },
-    "html2canvas": {
-      "src": "../../node_modules/html2canvas/dist/html2canvas.esm.js",
-      "file": "html2canvas.js",
-      "fileHash": "a48c9c9e",
-      "needsInterop": false
-    },
-    "firebase/database": {
-      "src": "../../node_modules/firebase/database/dist/esm/index.esm.js",
-      "file": "firebase_database.js",
-      "fileHash": "a5d724dc",
-      "needsInterop": false
-    },
-    "firebase/app": {
-      "src": "../../node_modules/firebase/app/dist/esm/index.esm.js",
-      "file": "firebase_app.js",
-      "fileHash": "cba2d953",
-      "needsInterop": false
-    }
-  },
-  "chunks": {
-    "chunk-P6RTVJOB": {
-      "file": "chunk-P6RTVJOB.js"
-    },
-    "chunk-W2KJBRRD": {
-      "file": "chunk-W2KJBRRD.js"
-    },
-    "chunk-G3PMV62Z": {
-      "file": "chunk-G3PMV62Z.js"
-    }
-  }
+  "browserHash": "308a2f1d",
+  "optimized": {},
+  "chunks": {}
 }
