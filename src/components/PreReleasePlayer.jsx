@@ -28,7 +28,7 @@ const PreReleasePlayer = () => {
         그러나 꽃이었다 (Still, a Flower)
       </h2>
 
-      {/* ✨ [디자인 수정] 투명한 흰색 박스 적용 ✨
+      {/* ✨ [디자인  수정] 투명한 흰색 박스 적용 ✨
           - bg-white/50: 아주 연한(10% 투명도) 흰색 배경
           - backdrop-blur-md: 배경을 흐리게 해서 유리 같은 느낌
           - border-white/20: 테두리도 흰색으로 맞춰줌
