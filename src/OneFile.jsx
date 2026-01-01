@@ -7,13 +7,22 @@ import { X, ArrowRight, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'luci
 // 컴포넌트 import
 import TrackVote from './components/TrackVote';
 import FloatingLyrics from './components/FloatingLyrics';
+import Guestbook from './components/Guestbook';
+import Luckydraw from './components/Luckydraw';
+import PreReleasePlayer from './components/PreReleasePlayer';
 
 // 로고 이미지 import
 import logoImg from './assets/logo.png';
 
-// 배경 비디오 (public 폴더의 로컬 파일)
-const backgroundVideo = '/background.mp4';
-const mobileBackgroundVideo = '/mobilebackground.mp4';
+// 배경 비디오 (public 폴더의 로컬 파일 - base URL 적용)
+const backgroundVideo = `${import.meta.env.BASE_URL}background.mp4`;
+const mobileBackgroundVideo = `${import.meta.env.BASE_URL}mobilebackground.mp4`;
+
+// 무빙 포스터 썸네일 이미지
+const movingPosterThumbnail = `${import.meta.env.BASE_URL}moving.jpg`;
+
+// 선공개 포스터 썸네일 이미지
+const flower = `${import.meta.env.BASE_URL}flower.png`;
 
 // 스티커 이미지 import (3D 카드에 사용)
 import sticker14 from './assets/stickers/3logy-images/img14.jpeg';
@@ -199,27 +208,31 @@ const CARDS_DATA = [
     image: null,
     description: '앨범 전곡 미리듣기.',
     year: '2025',
-    isLocked: true
+    isLocked: false,
+    isHighlightMedley: true
   },
   {
     id: 6,
     title: 'MOVING',
     subtitle: 'POSTER',
     category: '2025.12.31 (WED)',
-    image: null,
-    description: '',
+    image: movingPosterThumbnail,
+    description: '움직이는 포스터로 앨범의 분위기를 느껴보세요.',
     year: '2025',
-    isLocked: true
+    isLocked: false,
+    isMovingPoster: true
   },
   {
     id: 7,
     title: 'PRE',
     subtitle: 'RELEASE',
     category: '2026.01.01 (THU)',
-    image: null,
+    image: flower,
     description: '새해의 시작과 함께 공개되는 선공개 곡.',
     year: '2026',
-    isLocked: true
+    isLocked: false,
+    isPreReleaseCard: true,
+    youtubeUrl: 'https://www.youtube.com/embed/YgwGBgZEKaM?autoplay=1&rel=0'
   },
   {
     id: 8,
@@ -250,7 +263,31 @@ const CARDS_DATA = [
     description: 'CNBLUE 3RD FULL ALBUM [3LOGY] 공식 발매.',
     year: '2026',
     isLocked: true
+  },
+  /*
+  {
+    id: 11,
+    title: 'LUCKY',
+    subtitle: 'DRAW',
+    category: 'SPECIAL EVENT',
+    image: '/gachathumbnail.jpg',
+    description: '오늘의 럭키 송을 뽑아보세요!',
+    year: '2026',
+    isLocked: false,
+    isLuckyDrawCard: true
+  },
+  {
+    id: 12,
+    title: '16TH',
+    subtitle: 'GUESTBOOK',
+    category: 'SPECIAL',
+    image: sticker14,
+    description: 'CNBLUE 16주년 축하 메시지를 남겨주세요!',
+    year: '2026',
+    isLocked: false,
+    isGuestbookCard: true
   }
+  */
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -558,6 +595,8 @@ const Carousel3D = ({ onCardClick, selectedCard, mousePosition }) => {
 const Card3D = ({ card, isMobile }) => {
   const [isHovered, setIsHovered] = useState(false);
   const isLocked = card.isLocked;
+  const isHighlightMedley = card.isHighlightMedley;
+  const isMovingPoster = card.isMovingPoster;
 
   // 📱 모바일/PC별 카드 크기
   const cardWidth = isMobile ? 'w-[180px]' : 'w-[280px]';
@@ -595,6 +634,31 @@ const Card3D = ({ card, isMobile }) => {
               COMING SOON
             </div>
           </div>
+        ) : isHighlightMedley ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-zinc-900 via-black to-zinc-800">
+            <div className="absolute inset-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat" />
+            {/* 재생 버튼 아이콘 */}
+            <div className={`relative transition-all duration-500 ${isHovered ? 'scale-125' : 'scale-100'}`}>
+              <div className={`w-16 h-16 md:w-24 md:h-24 rounded-full border-2 flex items-center justify-center transition-all duration-500 ${
+                isHovered ? 'border-[#00C2FF] bg-[#00C2FF]/20' : 'border-white/30 bg-white/5'
+              }`}>
+                <svg
+                  className={`w-6 h-6 md:w-10 md:h-10 ml-1 transition-colors duration-500 ${
+                    isHovered ? 'text-[#00C2FF]' : 'text-white/60'
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+            </div>
+            <div className={`absolute bottom-1/4 font-mono text-[10px] md:text-xs tracking-[0.3em] transition-colors duration-500 ${
+              isHovered ? 'text-[#00C2FF]' : 'text-white/40'
+            }`}>
+              PLAY VIDEO
+            </div>
+          </div>
         ) : (
           <div className="absolute inset-0">
             <img
@@ -607,6 +671,23 @@ const Card3D = ({ card, isMobile }) => {
             <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent transition-opacity duration-500 ${
               isHovered ? 'opacity-90' : 'opacity-70'
             }`} />
+
+            {/* 무빙 포스터 카드일 때 재생 아이콘 오버레이 */}
+            {isMovingPoster && (
+              <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${
+                isHovered ? 'opacity-100' : 'opacity-0'
+              }`}>
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-[#00C2FF] bg-[#00C2FF]/20 flex items-center justify-center backdrop-blur-sm">
+                  <svg
+                    className="w-6 h-6 md:w-8 md:h-8 ml-1 text-[#00C2FF]"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -681,6 +762,9 @@ const DetailModal = ({ card, onClose, isVisible }) => {
   const isLyricPoster = card.id === 2;
   const isGallery = card.galleryImages && card.galleryImages.length > 0;
   const hasGroupPhotos = card.groupImages && card.groupImages.length > 0;
+  const isGuestbookCard = card.isGuestbookCard === true;
+  const isLuckyDrawCard = card.isLuckyDrawCard === true;
+  const isPreReleaseCard = card.isPreReleaseCard === true;
 
   return (
     <>
@@ -694,10 +778,28 @@ const DetailModal = ({ card, onClose, isVisible }) => {
         <div className="absolute inset-0 flex items-center justify-center p-2 md:p-8 overflow-y-auto">
           <div className={`relative w-full transition-all duration-700 ${
               isAnimating ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-            } ${isGallery ? 'max-w-4xl h-[85dvh]' : 'max-w-6xl'}`}>
+            } ${isGallery || isGuestbookCard || isLuckyDrawCard || isPreReleaseCard ? 'max-w-4xl h-[85dvh]' : 'max-w-6xl'}`}>
 
-            {/* [CASE 1] 트랙리스트 */}
-            {isTrackList ? (
+            {/* [CASE 0] 방명록 */}
+            {isGuestbookCard ? (
+              <div className="w-full h-full px-2 md:px-4">
+                <Guestbook />
+              </div>
+            )
+            /* [CASE 0.5] 럭키드로우 */
+            : isLuckyDrawCard ? (
+              <div className="w-full h-full px-2 md:px-4">
+                <Luckydraw />
+              </div>
+            )
+            /* [CASE 0.6] 선공개 곡 */
+            : isPreReleaseCard ? (
+              <div className="w-full h-full px-2 md:px-4">
+                <PreReleasePlayer />
+              </div>
+            )
+            /* [CASE 1] 트랙리스트 */
+            : isTrackList ? (
               <div className="w-full max-w-6xl mx-auto px-2 md:px-4">
                 <TrackVote tracklistImage={card.image} />
               </div>
@@ -820,11 +922,19 @@ const DetailModal = ({ card, onClose, isVisible }) => {
 // ═══════════════════════════════════════════════════════════════════════════════
 // 메인 앱 컴포넌트
 // ═══════════════════════════════════════════════════════════════════════════════
+// 하이라이트 메들리 비디오 경로
+const highlightMedleyVideo = `${import.meta.env.BASE_URL}medly.MP4`;
+
+// 무빙 포스터 비디오 경로
+const movingPosterVideo = `${import.meta.env.BASE_URL}movingposter.mp4`;
+
 const OneFile = () => {
   const [currentStage, setCurrentStage] = useState('intro');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [isMovingPosterOpen, setIsMovingPosterOpen] = useState(false);
 
   // 마우스 위치 추적
   useEffect(() => {
@@ -838,13 +948,19 @@ const OneFile = () => {
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && selectedCard) {
-        handleCloseDetail();
+      if (e.key === 'Escape') {
+        if (isVideoOpen) {
+          setIsVideoOpen(false);
+        } else if (isMovingPosterOpen) {
+          setIsMovingPosterOpen(false);
+        } else if (selectedCard) {
+          handleCloseDetail();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedCard]);
+  }, [selectedCard, isVideoOpen, isMovingPosterOpen]);
 
   const handleEnterExperience = useCallback(() => {
     setIsTransitioning(true);
@@ -855,6 +971,16 @@ const OneFile = () => {
   }, []);
 
   const handleCardClick = useCallback((card) => {
+    // 하이라이트 메들리 카드 클릭 시 비디오 오버레이 열기
+    if (card.isHighlightMedley) {
+      setIsVideoOpen(true);
+      return;
+    }
+    // 무빙 포스터 카드 클릭 시 비디오 오버레이 열기
+    if (card.isMovingPoster) {
+      setIsMovingPosterOpen(true);
+      return;
+    }
     setSelectedCard(card);
   }, []);
 
@@ -992,6 +1118,78 @@ const OneFile = () => {
         onClose={handleCloseDetail}
         isVisible={!!selectedCard}
       />
+
+      {/* 하이라이트 메들리 비디오 오버레이 */}
+      {isVideoOpen && (
+        <div
+          className="fixed inset-0 z-[150] bg-black/90 backdrop-blur-md flex items-center justify-center animate-fade-in-up"
+          style={{ height: '100dvh' }}
+          onClick={() => setIsVideoOpen(false)}
+        >
+          {/* 비디오 컨테이너 */}
+          <div
+            className="relative w-[95vw] md:w-[85vw] max-w-5xl aspect-video"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              src={highlightMedleyVideo}
+              autoPlay
+              controls
+              className="w-full h-full object-contain rounded-lg shadow-2xl shadow-white/10"
+            />
+
+            {/* 닫기 버튼 */}
+            <button
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute -top-12 right-0 md:-top-4 md:-right-14 w-10 h-10 md:w-12 md:h-12 border border-white/30 rounded-full flex items-center justify-center bg-black/50 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-300"
+              aria-label="Close video"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* 하단 안내 텍스트 */}
+          <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-xs text-white/30 tracking-widest">
+            PRESS ESC OR CLICK OUTSIDE TO CLOSE
+          </div>
+        </div>
+      )}
+
+      {/* 무빙 포스터 비디오 오버레이 */}
+      {isMovingPosterOpen && (
+        <div
+          className="fixed inset-0 z-[150] bg-black/90 backdrop-blur-md flex items-center justify-center animate-fade-in-up"
+          style={{ height: '100dvh' }}
+          onClick={() => setIsMovingPosterOpen(false)}
+        >
+          {/* 비디오 컨테이너 */}
+          <div
+            className="relative w-[95vw] md:w-[85vw] max-w-5xl aspect-video"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              src={movingPosterVideo}
+              autoPlay
+              controls
+              className="w-full h-full object-contain rounded-lg shadow-2xl shadow-white/10"
+            />
+
+            {/* 닫기 버튼 */}
+            <button
+              onClick={() => setIsMovingPosterOpen(false)}
+              className="absolute -top-12 right-0 md:-top-4 md:-right-14 w-10 h-10 md:w-12 md:h-12 border border-white/30 rounded-full flex items-center justify-center bg-black/50 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-300"
+              aria-label="Close video"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* 하단 안내 텍스트 */}
+          <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 font-mono text-xs text-white/30 tracking-widest">
+            PRESS ESC OR CLICK OUTSIDE TO CLOSE
+          </div>
+        </div>
+      )}
     </div>
   );
 };
